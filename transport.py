@@ -5,6 +5,7 @@ from io import BytesIO
 from PIL import Image
 import os
 from tqdm import tqdm
+import open3d as o3d
 
 from hair_process import hair_modeling, hair_model_alignment, smpl_head_alignment
 
@@ -55,12 +56,18 @@ def upload_image():
 
     matrices = []
 
-    matrix_0 = hair_model_alignment(batch_smplx_verts[0])
+    head_path = './data/head_model.obj'
+    head_mesh = o3d.io.read_triangle_mesh(head_path)
+    offset = batch_smplx_verts.shape[1] - 10475
+    matrix_0 = hair_model_alignment(head_mesh, batch_smplx_verts[0], offset=offset)
     matrices.append(matrix_0.tolist())
     ref_smpl_verts = batch_smplx_verts[0]
     smplx_head_index = np.load('./data/SMPL-X__FLAME_vertex_ids.npy')
+    smplx_head_index = smplx_head_index + offset
+    # smplx_head_index = [30838, 30839, 30837, 29877, ]
     for smplx_verts in tqdm(batch_smplx_verts[1:]):
         transform_matrix = smpl_head_alignment(ref_smpl_verts, smplx_verts, smplx_head_index)
+        # transform_matrix = hair_model_alignment(head_mesh, smplx_verts)
         transform_matrix = transform_matrix @ matrix_0
         matrices.append(transform_matrix.tolist())
     # for smplx_verts in tqdm(batch_smplx_verts[:]):

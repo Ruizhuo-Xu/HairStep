@@ -131,3 +131,5 @@ dmypy.json
 checkpoints/
 external/
 results/
+
+smpl_verts.npy

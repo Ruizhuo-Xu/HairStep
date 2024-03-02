@@ -242,10 +242,47 @@ def _hair_modeling(script_path):
 #     # aligned_hair_mesh = hair_lineset.transform(transform_matrix)
 #     # return np.asarray(aligned_hair_mesh.points), np.asarray(aligned_hair_mesh.lines)
 #     return transform_matrix
-def _hari_model_alignment(hair_lineset_path, head_mesh_path, smpl_model):
-    hair_lineset = o3d.io.read_line_set(hair_lineset_path)
+# def _hari_model_alignment(hair_lineset_path, head_mesh_path, smpl_model):
+#     hair_lineset = o3d.io.read_line_set(hair_lineset_path)
+#     # smpl_mesh = o3d.io.read_triangle_mesh(smpl_mesh_path)
+#     head_mesh = o3d.io.read_triangle_mesh(head_mesh_path)
+#     source_f = np.array(head_mesh.triangles)
+#     # target_f = np.array(smpl_mesh.triangles)
+#     source_v = np.array(head_mesh.vertices)
+#     # target_v = np.array(smpl_mesh.vertices)
+#     target_v = smpl_model
+#     target_idxs = [
+#         [1311, 1100, 2263],
+#         [411, 446, 302],
+#         [9003, 9003, 9003],
+#         [8952, 8952, 8952]
+#     ]
+#     source_f_idxs = [6984, 5330, 11444, 1093]
+#     source_idxs = [
+#         [source_f[source_f_idxs[0]][0], source_f[source_f_idxs[0]][1], source_f[source_f_idxs[0]][2]],
+#         [source_f[source_f_idxs[1]][0], source_f[source_f_idxs[1]][1], source_f[source_f_idxs[1]][2]],
+#         [source_f[source_f_idxs[2]][0], source_f[source_f_idxs[2]][0], source_f[source_f_idxs[2]][0]],
+#         [source_f[source_f_idxs[3]][1], source_f[source_f_idxs[3]][1], source_f[source_f_idxs[3]][1]]
+#     ]
+#     source_keypoints = []
+#     for k, source_idx in enumerate(source_idxs):
+#         points = [source_v[i] for i in source_idx]
+#         points = sum(points) / len(points)
+#         source_keypoints.append(points)
+#     target_keypoints = []
+#     for k, target_idx in enumerate(target_idxs):
+#         points = [target_v[i] for i in target_idx]
+#         points = sum(points) / len(points)
+#         target_keypoints.append(points)
+#     transform_matrix = find_similarity_transform_matrix(source_keypoints, target_keypoints)
+#     # aligned_hair_mesh = hair_lineset.transform(transform_matrix)
+#     # return np.asarray(aligned_hair_mesh.points), np.asarray(aligned_hair_mesh.lines)
+#     return transform_matrix
+
+def _hari_model_alignment(head_mesh, smpl_model, offset=0, is_scale=True):
+    # hair_lineset = o3d.io.read_line_set(hair_lineset_path)
     # smpl_mesh = o3d.io.read_triangle_mesh(smpl_mesh_path)
-    head_mesh = o3d.io.read_triangle_mesh(head_mesh_path)
+    # head_mesh = o3d.io.read_triangle_mesh(head_mesh_path)
     source_f = np.array(head_mesh.triangles)
     # target_f = np.array(smpl_mesh.triangles)
     source_v = np.array(head_mesh.vertices)
@@ -257,6 +294,12 @@ def _hari_model_alignment(hair_lineset_path, head_mesh_path, smpl_model):
         [9003, 9003, 9003],
         [8952, 8952, 8952]
     ]
+    # target_idxs = [
+    #     [30838, 30839, 30837],
+    #     [29877, 29875, 29874],
+    #     [38555, 38555, 38555],
+    #     [38542, 38542, 38542]
+    # ]
     source_f_idxs = [6984, 5330, 11444, 1093]
     source_idxs = [
         [source_f[source_f_idxs[0]][0], source_f[source_f_idxs[0]][1], source_f[source_f_idxs[0]][2]],
@@ -271,10 +314,10 @@ def _hari_model_alignment(hair_lineset_path, head_mesh_path, smpl_model):
         source_keypoints.append(points)
     target_keypoints = []
     for k, target_idx in enumerate(target_idxs):
-        points = [target_v[i] for i in target_idx]
+        points = [target_v[i + offset] for i in target_idx]
         points = sum(points) / len(points)
         target_keypoints.append(points)
-    transform_matrix = find_similarity_transform_matrix(source_keypoints, target_keypoints)
+    transform_matrix = find_similarity_transform_matrix(source_keypoints, target_keypoints, is_scale=is_scale)
     # aligned_hair_mesh = hair_lineset.transform(transform_matrix)
     # return np.asarray(aligned_hair_mesh.points), np.asarray(aligned_hair_mesh.lines)
     return transform_matrix
@@ -289,10 +332,10 @@ def hair_modeling(script_path):
     hair_model = o3d.io.read_line_set(hair_path)
     return np.asarray(hair_model.points), np.asarray(hair_model.lines)
     
-def hair_model_alignment(smpl_model):
-    hair_path = './results/real_imgs/hair3D/output.ply'
-    head_path = './data/head_model.obj'
-    transform_matrix = _hari_model_alignment(hair_path, head_path, smpl_model)
+def hair_model_alignment(head_model, smpl_model, offset=0, is_scale=True):
+    # hair_path = './results/real_imgs/hair3D/output.ply'
+    # head_path = './data/head_model.obj'
+    transform_matrix = _hari_model_alignment(head_model, smpl_model, offset, is_scale)
     return transform_matrix
 
 def smpl_head_alignment(pre_smpl_verts, cur_smpl_verts, head_index):
