@@ -32,7 +32,7 @@ def upload_image():
         return jsonify({"error": "smplx verts data not provided"}), 400
 
     batch_smplx_verts = np.array(data['smplx_verts'])
-    np.save('smpl_verts.npy', batch_smplx_verts)
+    # np.save('smpl_verts.npy', batch_smplx_verts)
 
     print(batch_smplx_verts.shape)
 

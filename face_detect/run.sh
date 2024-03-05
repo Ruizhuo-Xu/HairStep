@@ -1,1 +1,1 @@
-CUDA_VISIBLE_DEVICES=3 python utils.py
+CUDA_VISIBLE_DEVICES=0 python face_detect/utils.py

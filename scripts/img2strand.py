@@ -42,5 +42,6 @@ def img2strand(opt):
         imageio.imwrite(os.path.join(output_strand_path, item), (strand_pred*255).astype(np.uint8))
 
 if __name__ == "__main__":
+    print("Trans Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     opt = BaseOptions().parse()
     img2strand(opt)

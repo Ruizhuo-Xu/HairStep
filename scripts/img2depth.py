@@ -60,5 +60,6 @@ def img2depth(opt):
         depth2vis(mask, depth_pred_norm, os.path.join(output_depth_vis_path, item))
 
 if __name__ == "__main__":
+    print("Trans Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     opt = BaseOptions().parse()
     img2depth(opt)

@@ -39,7 +39,7 @@ def detect_and_crop():
 
     base64_string = data['image']
     image_array = base64_to_numpy(base64_string)
-    save_path = './temp_images'
+    save_path = '/workspace/face_detect/temp_images'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
@@ -48,13 +48,13 @@ def detect_and_crop():
 
     Image.fromarray(image_array).save(image_path)
     print("image saved:" + image_path)
-    save_path = '../results/real_imgs/img'
+    save_path = '/workspace/results/real_imgs/img'
     cropped_image_filename = 'output.png'
     cropped_image_path = os.path.join(save_path, cropped_image_filename)
 
-    exists_files = glob('../results/real_imgs/*/*.*')
+    exists_files = glob('/workspace/results/real_imgs/*/*.*')
     [subprocess.run(['rm', file]) for file in exists_files]
-    script_path = './run.sh'
+    script_path = '/workspace/face_detect/run.sh'
     result = subprocess.run(['sh', script_path])
     if result.returncode == 0:
         return jsonify({"msg": 0})

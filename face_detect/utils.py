@@ -1,8 +1,11 @@
+import os
+
 import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
  
 def detect_and_crop_faces(image_path, output_path, scale=1.5):
+    print("Crop Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     app = FaceAnalysis(name='buffalo_l')   # 使用的检测模型名为buffalo_sc
     app.prepare(ctx_id=0, det_size=(640, 640))  # ctx_id小于0表示用cpu预测，det_size表示resize后的图片分辨率  
     
@@ -22,6 +25,6 @@ def detect_and_crop_faces(image_path, output_path, scale=1.5):
 
 
 if __name__ == '__main__':
-    image_path = './temp_images/uploaded_image.png'
-    output_path = '../results/real_imgs/img/output.png'
+    image_path = '/workspace/face_detect/temp_images/uploaded_image.png'
+    output_path = '/workspace/results/real_imgs/img/output.png'
     detect_and_crop_faces(image_path, output_path, scale=2.0)

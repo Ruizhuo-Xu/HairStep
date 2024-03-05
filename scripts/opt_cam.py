@@ -43,6 +43,7 @@ def opt_cam(sample_info):
             lmk_opt.save_param(output_param)
             imageio.imwrite(output_img, image)
 if __name__ == '__main__':
+    print("Trans Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     opt = BaseOptions().parse()
 
     img_dir = os.path.join(opt.root_real_imgs, 'resized_img')

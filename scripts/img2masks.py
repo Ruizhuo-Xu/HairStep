@@ -77,5 +77,6 @@ def img2masks(opt):
 
 
 if __name__ == "__main__":
+    print("Trans Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     opt = BaseOptions().parse()
     img2masks(opt)

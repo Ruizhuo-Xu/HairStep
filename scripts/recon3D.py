@@ -134,5 +134,6 @@ def recon3D_from_hairstep(opt):
             export_hair_real(orien_net, cuda, test_data, mesh_path, hair3D_path)
 
 if __name__ == '__main__':
+    print("Trans Cur GPU ID: " + os.environ.get('CUDA_VISIBLE_DEVICES'))
     opt = BaseOptions().parse()
     recon3D_from_hairstep(opt)
